@@ -29,5 +29,5 @@
   "java.sources.organizeImports.staticStarThreshold": 1000,
   "java.configuration.updateBuildConfiguration": "automatic",
   // 警告対象外ファイル
-  "java.diagnostic.filter": ["**/generated/**"]
+  "java.diagnostic.filter": ["**/generated/**/*"]
 }

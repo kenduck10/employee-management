@@ -1,2 +1,5 @@
 datasource:
-  driver-class-name:
+  driver-class-name: org.postgresql.Driver
+  url: jdbc:postgresql://localhost:5432/employee_management
+  username: postgres
+  password: password

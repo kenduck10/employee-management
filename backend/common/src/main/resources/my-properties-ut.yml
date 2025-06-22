@@ -1,0 +1,4 @@
+datasource:
+  url: jdbc:postgresql://localhost:5432/employee_management_ut
+  username: postgres
+  password: password
