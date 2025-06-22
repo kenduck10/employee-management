@@ -4,6 +4,8 @@
     "vscjava.vscode-java-pack",
     // Javaデバッガサポート
     "vscjava.vscode-java-debug",
+    // Gradleサポート
+    "vscjava.vscode-gradle",
     // XMLフォーマッタ
     "redhat.vscode-xml",
     // Lombokサポート
