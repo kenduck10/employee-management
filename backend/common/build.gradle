@@ -13,9 +13,9 @@ plugins {
 
 dependencies {
     implementation 'org.postgresql:postgresql:42.7.7'
-    // // MyBatis Generator dependencies
-    // mybatisGenerator 'org.mybatis.generator:mybatis-generator-core:1.4.2'
-    // mybatisGenerator 'mysql:mysql-connector-java:8.0.33'
+// // MyBatis Generator dependencies
+// mybatisGenerator 'org.mybatis.generator:mybatis-generator-core:1.4.2'
+// mybatisGenerator 'mysql:mysql-connector-java:8.0.33'
 }
 
 // // MyBatis Generator configuration
@@ -42,17 +42,17 @@ def getDatasourceFromYaml(String filePath) {
 task migrateDb(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
     group = 'flyway'
     description = 'Migrates the employee_management database including local test data'
-    
+
     doFirst {
         def resourcesPath = "${projectDir}/src/main/resources"
         def propertiesPath = "${resourcesPath}/my-properties.yml"
         def datasource = getDatasourceFromYaml(propertiesPath)
-        
+
         url = datasource.url
         user = datasource.username
         password = datasource.password
         def definitionPath = "filesystem:${resourcesPath}/db/migration/common"
-        def dataPath= "filesystem:${resourcesPath}/db/migration/local"
+        def dataPath = "filesystem:${resourcesPath}/db/migration/local"
         locations = [definitionPath, dataPath]
     }
 }
@@ -64,7 +64,7 @@ task cleanDb(type: org.flywaydb.gradle.task.FlywayCleanTask) {
     def resourcesPath = "${projectDir}/src/main/resources"
     def propertiesPath = "${resourcesPath}/my-properties.yml"
     def datasource = getDatasourceFromYaml(propertiesPath)
-    
+
     doFirst {
         url = datasource.url
         user = datasource.username
@@ -76,10 +76,10 @@ task cleanDb(type: org.flywaydb.gradle.task.FlywayCleanTask) {
 task migrateUtDb(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
     group = 'flyway'
     description = 'Migrates the employee_management_ut database with DDL only (no test data)'
-    
+
     doFirst {
         def datasource = getDatasourceFromYaml('src/main/resources/my-properties-ut.yml')
-        
+
         url = datasource.url
         user = datasource.username
         password = datasource.password

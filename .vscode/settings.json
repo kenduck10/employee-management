@@ -1,7 +1,7 @@
 {
   // フォーマット設定
   // 基本はprettier、prettierを使いたくない場合は個別設定
-  "editor.formatOnSave": true,
+   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.requireConfig": true,
   "[xml]": {
@@ -16,6 +16,9 @@
   "java.format.enabled": true,
   "java.format.settings.profile": "GoogleStyle",
   "java.format.settings.url": "eclipse-java-google-style.xml",
+  "[groovy]": {
+    "editor.defaultFormatter": "NicolasVuillamy.vscode-groovy-lint"
+  },
   "[sql]": {
     "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
   },
@@ -30,5 +33,8 @@
   "java.configuration.updateBuildConfiguration": "automatic",
   // 警告対象外ファイル
   "java.diagnostic.filter": ["**/generated/**/*"],
-  "gradle.nestedProjects": true
+  "gradle.nestedProjects": true,
+  "files.associations": {
+    "**/*.gradle": "groovy"
+  }
 }
