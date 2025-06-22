@@ -1,0 +1,20 @@
+{
+  "recommendations": [
+    // Javaサポート
+    "vscjava.vscode-java-pack",
+    // Javaデバッガサポート
+    "vscjava.vscode-java-debug",
+    // XMLフォーマッタ
+    "redhat.vscode-xml",
+    // Lombokサポート
+    "vscjava.vscode-lombok",
+    // SpringBootサポート
+    "vmware.vscode-boot-dev-pack",
+    // prettierサポート
+    "esbenp.prettier-vscode",
+    // SQLフォーマッタ
+    "inferrinizzard.prettier-sql-vscode",
+    // 複数ファイル一括フォーマッタ
+    "jbockle.jbockle-format-files"
+  ]
+}

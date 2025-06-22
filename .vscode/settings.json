@@ -1,0 +1,33 @@
+{
+  // フォーマット設定
+  // 基本はprettier、prettierを使いたくない場合は個別設定
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.requireConfig": true,
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml"
+  },
+  "[java]": {
+    // google-styleによるインデント設定が効かないことがあるので個別設定
+    "editor.detectIndentation": false,
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": null
+  },
+  "java.format.enabled": true,
+  "java.format.settings.profile": "GoogleStyle",
+  "java.format.settings.url": "eclipse-java-google-style.xml",
+  "[sql]": {
+    "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
+  },
+  "formatFiles.excludePattern": "{**/.gradle/**/*,**/gradle/**/*,**/bin/**/*,**/build/**/*}",
+
+  // Java
+  "java.compile.nullAnalysis.mode": "disabled",
+  "java.saveActions.organizeImports": true,
+  // importの省略記号は使わない
+  "java.sources.organizeImports.starThreshold": 1000,
+  "java.sources.organizeImports.staticStarThreshold": 1000,
+  "java.configuration.updateBuildConfiguration": "automatic",
+  // 警告対象外ファイル
+  "java.diagnostic.filter": ["**/generated/**"]
+}

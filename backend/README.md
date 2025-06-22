@@ -1,6 +1,6 @@
 # Employee Management Backend
 
-Spring Boot multi-project構成による従業員管理システムのバックエンドです。
+Spring Boot multi-project 構成による従業員管理システムのバックエンドです。
 
 ## プロジェクト構成
 
@@ -40,8 +40,8 @@ backend/
 
 - **フレームワーク**: Spring Boot 3.2.0
 - **ビルドツール**: Gradle
-- **O/Rマッパー**: MyBatis 3.0.3
-- **DBマイグレーション**: Flyway 9.22.3
+- **O/R マッパー**: MyBatis 3.0.3
+- **DB マイグレーション**: Flyway 9.22.3
 - **バッチ処理**: Spring Batch
 - **データベース**: MySQL 8.0
 
@@ -49,7 +49,7 @@ backend/
 
 ### 1. データベース準備
 
-MySQLサーバーを起動し、データベースを作成してください：
+MySQL サーバーを起動し、データベースを作成してください：
 
 ```sql
 CREATE DATABASE employee_management;
@@ -69,7 +69,7 @@ cd common
 ../gradlew flywayMigrate
 ```
 
-### 4. MyBatisモデル・マッパー生成
+### 4. MyBatis モデル・マッパー生成
 
 ```bash
 cd common
@@ -78,7 +78,7 @@ cd common
 
 ## 使用方法
 
-### Commonモジュールの実行
+### Common モジュールの実行
 
 ```bash
 cd common
@@ -95,6 +95,7 @@ cd batch/employee_addition
 ## データベーススキーマ
 
 ### departments テーブル
+
 - id (BIGINT, PRIMARY KEY)
 - name (VARCHAR(100))
 - description (TEXT)
@@ -102,6 +103,7 @@ cd batch/employee_addition
 - updated_at (TIMESTAMP)
 
 ### employees テーブル
+
 - id (BIGINT, PRIMARY KEY)
 - employee_number (VARCHAR(20), UNIQUE)
 - first_name (VARCHAR(50))
@@ -120,15 +122,17 @@ cd batch/employee_addition
 
 ### 従業員追加バッチ
 
-CSVファイルから従業員データを読み込み、データベースに登録するバッチ処理です。
+CSV ファイルから従業員データを読み込み、データベースに登録するバッチ処理です。
 
-**CSVフォーマット:**
+**CSV フォーマット:**
+
 ```csv
 employeeNumber,firstName,lastName,email,phone,hireDate,departmentId,position,salary,status
 EMP001,John,Doe,john.doe@example.com,555-0101,2024-01-15,1,Software Engineer,75000.00,ACTIVE
 ```
 
 **実行方法:**
+
 ```bash
 cd batch/employee_addition
 ../../gradlew bootRun
@@ -136,19 +140,19 @@ cd batch/employee_addition
 
 ## 開発
 
-### MyBatisモデル・マッパーの再生成
+### MyBatis モデル・マッパーの再生成
 
 テーブル構造を変更した場合：
 
-1. Flywayマイグレーションファイルを作成
+1. Flyway マイグレーションファイルを作成
 2. マイグレーション実行: `./gradlew flywayMigrate`
-3. MyBatis再生成: `./gradlew mybatisGenerate`
+3. MyBatis 再生成: `./gradlew mybatisGenerate`
 
 ### 新しいバッチジョブの追加
 
 1. `batch/` ディレクトリに新しいサブプロジェクトを作成
 2. `settings.gradle` にプロジェクトを追加
-3. Spring Batchの設定を追加
+3. Spring Batch の設定を追加
 
 ## 設定
 
@@ -164,6 +168,6 @@ spring:
     password: password
 ```
 
-### MyBatis設定
+### MyBatis 設定
 
-`generatorConfig.xml` でMyBatis Generatorの設定を変更できます。
+`generatorConfig.xml` で MyBatis Generator の設定を変更できます。

@@ -4,13 +4,13 @@ spring:
     username: root
     password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
-  
+
   batch:
     job:
-      enabled: false  # Disable automatic job execution on startup
+      enabled: false # Disable automatic job execution on startup
     jdbc:
       initialize-schema: always
-  
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.example.employee.common.model
