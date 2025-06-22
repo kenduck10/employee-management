@@ -1,0 +1,6 @@
+employeeNumber,firstName,lastName,email,phone,hireDate,departmentId,position,salary,status
+EMP001,John,Doe,john.doe@example.com,555-0101,2024-01-15,1,Software Engineer,75000.00,ACTIVE
+EMP002,Jane,Smith,jane.smith@example.com,555-0102,2024-02-01,1,Senior Developer,85000.00,ACTIVE
+EMP003,Mike,Johnson,mike.johnson@example.com,555-0103,2024-01-20,2,HR Manager,70000.00,ACTIVE
+EMP004,Sarah,Williams,sarah.williams@example.com,555-0104,2024-03-01,3,Financial Analyst,65000.00,ACTIVE
+EMP005,David,Brown,david.brown@example.com,555-0105,2024-02-15,4,Marketing Specialist,60000.00,ACTIVE

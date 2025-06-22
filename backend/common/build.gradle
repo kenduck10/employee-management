@@ -1,0 +1,26 @@
+plugins {
+    id 'org.mybatis.generator'
+    id 'org.flywaydb.flyway'
+}
+
+dependencies {
+    // MyBatis Generator dependencies
+    mybatisGenerator 'org.mybatis.generator:mybatis-generator-core:1.4.2'
+    mybatisGenerator 'mysql:mysql-connector-java:8.0.33'
+}
+
+// MyBatis Generator configuration
+mybatisGenerator {
+    verbose = true
+    overwrite = true
+    configFile = 'src/main/resources/generatorConfig.xml'
+}
+
+// Flyway configuration
+flyway {
+    url = 'jdbc:mysql://localhost:3306/employee_management'
+    user = 'root'
+    password = 'password'
+    locations = ['classpath:db/migration']
+    baselineOnMigrate = true
+}

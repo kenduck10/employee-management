@@ -1,0 +1,4 @@
+rootProject.name = 'employee-management'
+
+include 'common'
+include 'batch:employee_addition'
