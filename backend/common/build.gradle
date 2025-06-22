@@ -1,41 +1,45 @@
+buildscript {
+    dependencies {
+        classpath 'org.yaml:snakeyaml:2.4'
+    }
+}
+
 plugins {
-    id 'org.mybatis.generator'
+    // id 'org.mybatis.generator'
     id 'org.flywaydb.flyway'
 }
 
 dependencies {
-    // MyBatis Generator dependencies
-    mybatisGenerator 'org.mybatis.generator:mybatis-generator-core:1.4.2'
-    mybatisGenerator 'mysql:mysql-connector-java:8.0.33'
+    // // MyBatis Generator dependencies
+    // mybatisGenerator 'org.mybatis.generator:mybatis-generator-core:1.4.2'
+    // mybatisGenerator 'mysql:mysql-connector-java:8.0.33'
     
     // PostgreSQL driver for Flyway
     implementation 'org.postgresql:postgresql:42.6.0'
+    // // YAML parsing library
+    // implementation 'org.yaml:snakeyaml:2.0'
 }
 
-// MyBatis Generator configuration
-mybatisGenerator {
-    verbose = true
-    overwrite = true
-    configFile = 'src/main/resources/generatorConfig.xml'
-}
+// // MyBatis Generator configuration
+// mybatisGenerator {
+//     verbose = true
+//     overwrite = true
+//     configFile = 'src/main/resources/generatorConfig.xml'
+// }
 
-// Function to parse YAML properties (simple parser for our specific structure)
-def parseYamlDatasource(String filePath) {
-    def content = file(filePath).text
-    def lines = content.split('\n')
+// Function to parse YAML properties using SnakeYAML library
+def getDatasourceFromYaml(String filePath) {
+    def yaml = new org.yaml.snakeyaml.Yaml()
+    // def inputStream = new FileInputStream(file(filePath))
+    def yamlData = yaml.load(file(filePath))
+    // inputStream.close()
+    // Extract datasource properties with proper hierarchy handling
+    def datasourceConfig = yamlData.datasource
     def datasource = [:]
-    
-    lines.each { line ->
-        line = line.trim()
-        if (line.startsWith('url:')) {
-            datasource.url = line.substring(4).trim()
-        } else if (line.startsWith('username:')) {
-            datasource.username = line.substring(9).trim()
-        } else if (line.startsWith('password:')) {
-            datasource.password = line.substring(9).trim()
-        }
-    }
-    
+    datasource.url = datasourceConfig.url
+    datasource.username = datasourceConfig.username
+    datasource.password = datasourceConfig.password
+    datasource.driverClassName = datasourceConfig['driver-class-name']
     return datasource
 }
 
@@ -54,7 +58,7 @@ task migrateDb(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
     description = 'Migrates the employee_management database including local test data'
     
     doFirst {
-        def datasource = parseYamlDatasource('src/main/resources/my-properties.yml')
+        def datasource = getDatasourceFromYaml('src/main/resources/my-properties.yml')
         
         url = datasource.url
         user = datasource.username
@@ -70,7 +74,7 @@ task migrateUtDb(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
     description = 'Migrates the employee_management_ut database with DDL only (no test data)'
     
     doFirst {
-        def datasource = parseYamlDatasource('src/main/resources/my-properties-ut.yml')
+        def datasource = getDatasourceFromYaml('src/main/resources/my-properties-ut.yml')
         
         url = datasource.url
         user = datasource.username
