@@ -25,12 +25,32 @@ dependencies {
 //     configFile = 'src/main/resources/generatorConfig.xml'
 // }
 
+import org.yaml.snakeyaml.Yaml
+
+// Datasource class definition
+class Datasource {
+
+    String url
+    String username
+    String password
+    String driverClassName
+
+    Datasource() { }
+
+    Datasource(String url, String username, String password, String driverClassName) {
+        this.url = url
+        this.username = username
+        this.password = password
+        this.driverClassName = driverClassName
+    }
+
+}
+
 // Function to parse YAML properties using SnakeYAML library
-def getDatasourceFromYaml(String filePath) {
-    def yaml = new org.yaml.snakeyaml.Yaml()
-    def yamlData = yaml.load(new File(filePath).newInputStream())
+Map getDatasourceFromYaml(String filePath) {
+    def yamlData = new Yaml().load(new File(filePath).newInputStream())
     def datasourceConfig = yamlData.datasource
-    def datasource = [:]
+    Map datasource = [:]
     datasource.url = datasourceConfig.url
     datasource.username = datasourceConfig.username
     datasource.password = datasourceConfig.password
@@ -44,8 +64,8 @@ task migrateDb(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
     description = 'Migrates the employee_management database including local test data'
 
     doFirst {
-        def resourcesPath = "${projectDir}/src/main/resources"
-        def propertiesPath = "${resourcesPath}/my-properties.yml"
+        String resourcesPath = "${projectDir}/src/main/resources"
+        String propertiesPath = "${resourcesPath}/my-properties.yml"
         def datasource = getDatasourceFromYaml(propertiesPath)
 
         url = datasource.url

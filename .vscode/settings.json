@@ -1,7 +1,7 @@
 {
   // フォーマット設定
   // 基本はprettier、prettierを使いたくない場合は個別設定
-   "editor.formatOnSave": true,
+  "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.requireConfig": true,
   "[xml]": {
