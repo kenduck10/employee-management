@@ -13,7 +13,6 @@ dependencies {
 }
 
 apply from: 'gradle/profile.gradle'
-applyProfileConfigs()
 
 def flywayParam = getFlywayParam()
 
