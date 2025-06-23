@@ -1,0 +1,11 @@
+apply from: 'gradle/db.gradle'
+
+ext.getDatasource = {
+    return createDatasource('my-properties-prd.yml')
+}
+
+ext.getFlywayParam = {
+    def datasource = getDatasource()
+    return createFlywayParam(datasource, "filesystem:${resourcesPath}/db/migration/prd")
+}
+

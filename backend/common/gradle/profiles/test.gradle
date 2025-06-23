@@ -1,76 +1,10 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath 'org.yaml:snakeyaml:2.4'
-    }
-}
-dependencies {
-    implementation 'org.yaml:snakeyaml:2.4'
-}
-
-import org.yaml.snakeyaml.Yaml
-
-String resourcesPath = "${projectDir}/src/main/resources"
+apply from: 'gradle/db.gradle'
 
 ext.getDatasource = {
-    String propertiesPath = "${resourcesPath}/my-properties-ut.yml"
-    def datasource = new Yaml()
-    .load(new File(propertiesPath).newInputStream())
-    .datasource
-    return new Datasource(
-        datasource.url,
-        datasource.username,
-        datasource.password,
-        datasource['driver-class-name']
-    )
+    return createDatasource('my-properties-ut.yml')
 }
 
 ext.getFlywayParam = {
-    Datasource datasource = getDatasource()
-    return new FlywayParam(
-        datasource,
-        "filesystem:${resourcesPath}/db/migration/common",
-        null
-    )
+    def datasource = getDatasource()
+    return createFlywayParam(datasource, null)
 }
-
-class Datasource {
-
-    String url
-    String username
-    String password
-    String driverClassName
-
-    Datasource(String url, String username, String password, String driverClassName) {
-        this.url = url
-        this.username = username
-        this.password = password
-        this.driverClassName = driverClassName
-    }
-
-}
-
-class FlywayParam {
-
-    String url
-    String user
-    String password
-    String[] locations
-    boolean cleanDisabled
-
-    FlywayParam(
-        Datasource datasource,
-        String definitionPath,
-        String dataPath) {
-        this.url = datasource.url
-        this.user = datasource.username
-        this.password = datasource.password
-        this.locations = [definitionPath, dataPath].grep { it != null }
-        this.cleanDisabled = false
-        }
-
-}
-
