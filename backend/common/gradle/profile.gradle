@@ -1,0 +1,88 @@
+/**
+ * アクティブなSpring Profileを取得する関数
+ *
+ * 優先順位:
+ * 1. コマンドライン引数 -Dspring.profiles.active=xxx
+ * 2. 環境変数 SPRING_PROFILES_ACTIVE
+ * 3. デフォルト値 'default'
+ *
+ * @return アクティブなプロファイル名（複数の場合はカンマ区切り文字列）
+ */
+ext.getActiveProfile = {
+    def profileFromSystemProperty = System.getProperty('spring.profiles.active')
+    if (profileFromSystemProperty != null && !profileFromSystemProperty.trim().isEmpty()) {
+        return profileFromSystemProperty.trim()
+    }
+    def profileFromEnv = System.getenv('SPRING_PROFILES_ACTIVE')
+    if (profileFromEnv != null && !profileFromEnvVar.trim().isEmpty()) {
+        return profileFromEnv.trim()
+    }
+    return 'default'
+}
+
+/**
+ * アクティブなプロファイルを配列として取得する関数
+ * 複数プロファイルがカンマ区切りで指定されている場合に対応
+ *
+ * @return アクティブなプロファイル名の配列
+ */
+ext.getActiveProfiles = {
+    def activeProfile = getActiveProfile()
+    return activeProfile.split(',')
+        .collect { it.trim() }
+        .findAll { !it.isEmpty() }
+}
+
+/**
+ * 指定されたプロファイルがアクティブかどうかを判定する関数
+ *
+ * @param profileName 判定したいプロファイル名
+ * @return アクティブな場合true、そうでない場合false
+ */
+ext.isProfileActive = { String profileName ->
+    return getActiveProfiles().contains(profileName)
+}
+
+/**
+ * プロファイル情報を表示する関数
+ */
+ext.printProfileInfo = {
+    println '===================='
+    println 'Profile Information'
+    println '===================='
+    println "Active Profile: ${getActiveProfile()}"
+    println "Active Profiles: ${getActiveProfiles().join(', ')}"
+    println "System Property: ${System.getProperty('spring.profiles.active') ?: 'Not set'}"
+    println "Environment Variable: ${System.getenv('SPRING_PROFILES_ACTIVE') ?: 'Not set'}"
+    println '===================='
+}
+
+/**
+ * プロファイル別設定ファイルを自動読み込みする関数
+ *
+ * @param configDir 設定ファイルが格納されているディレクトリ（デフォルト: 'gradle/profiles'）
+ */
+ext.applyProfileConfigs = { String configDir = 'gradle/profiles' ->
+    getActiveProfiles().each { profile ->
+        def configFile = "${configDir}/${profile}.gradle"
+        if (file(configFile).exists()) {
+            println "Applying profile config: ${configFile}"
+            apply from: configFile
+        }
+    }
+}
+
+// プロファイル情報表示タスク
+task showActiveProfile {
+    group 'profile'
+    description 'Display active Spring profiles information'
+    doLast {
+        printProfileInfo()
+    }
+}
+
+// 初期化時にプロファイル情報を表示
+logger.lifecycle("Active profile: ${getActiveProfile()}")
+
+// プロファイル別設定の自動読み込み
+applyProfileConfigs()

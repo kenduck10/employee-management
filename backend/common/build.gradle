@@ -1,109 +1,26 @@
 buildscript {
     dependencies {
-        classpath 'org.yaml:snakeyaml:2.4'
         classpath 'org.flywaydb:flyway-database-postgresql:11.9.1'
     }
 }
 
 plugins {
-    // id 'org.mybatis.generator'
-    id 'java'
     id 'org.flywaydb.flyway' version '11.9.1'
 }
 
 dependencies {
     implementation 'org.postgresql:postgresql:42.7.7'
-// // MyBatis Generator dependencies
-// mybatisGenerator 'org.mybatis.generator:mybatis-generator-core:1.4.2'
-// mybatisGenerator 'mysql:mysql-connector-java:8.0.33'
 }
 
-// // MyBatis Generator configuration
-// mybatisGenerator {
-//     verbose = true
-//     overwrite = true
-//     configFile = 'src/main/resources/generatorConfig.xml'
-// }
+apply from: 'gradle/profile.gradle'
+applyProfileConfigs()
 
-import org.yaml.snakeyaml.Yaml
+def flywayParam = getFlywayParam()
 
-// Datasource class definition
-class Datasource {
-
-    String url
-    String username
-    String password
-    String driverClassName
-
-    Datasource() { }
-
-    Datasource(String url, String username, String password, String driverClassName) {
-        this.url = url
-        this.username = username
-        this.password = password
-        this.driverClassName = driverClassName
-    }
-
-}
-
-// Function to parse YAML properties using SnakeYAML library
-Map getDatasourceFromYaml(String filePath) {
-    def yamlData = new Yaml().load(new File(filePath).newInputStream())
-    def datasourceConfig = yamlData.datasource
-    Map datasource = [:]
-    datasource.url = datasourceConfig.url
-    datasource.username = datasourceConfig.username
-    datasource.password = datasourceConfig.password
-    datasource.driverClassName = datasourceConfig['driver-class-name']
-    return datasource
-}
-
-// Flyway task for employee_management database (includes local data)
-task migrateDb(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
-    group = 'flyway'
-    description = 'Migrates the employee_management database including local test data'
-
-    doFirst {
-        String resourcesPath = "${projectDir}/src/main/resources"
-        String propertiesPath = "${resourcesPath}/my-properties.yml"
-        def datasource = getDatasourceFromYaml(propertiesPath)
-
-        url = datasource.url
-        user = datasource.username
-        password = datasource.password
-        def definitionPath = "filesystem:${resourcesPath}/db/migration/common"
-        def dataPath = "filesystem:${resourcesPath}/db/migration/local"
-        locations = [definitionPath, dataPath]
-    }
-}
-
-task cleanDb(type: org.flywaydb.gradle.task.FlywayCleanTask) {
-    group = 'flyway'
-    description = 'Clean tables.'
-
-    def resourcesPath = "${projectDir}/src/main/resources"
-    def propertiesPath = "${resourcesPath}/my-properties.yml"
-    def datasource = getDatasourceFromYaml(propertiesPath)
-
-    doFirst {
-        url = datasource.url
-        user = datasource.username
-        password = datasource.password
-        cleanDisabled = false
-    }
-}
-// Flyway task for employee_management_ut database (DDL only)
-task migrateUtDb(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
-    group = 'flyway'
-    description = 'Migrates the employee_management_ut database with DDL only (no test data)'
-
-    doFirst {
-        def datasource = getDatasourceFromYaml('src/main/resources/my-properties-ut.yml')
-
-        url = datasource.url
-        user = datasource.username
-        password = datasource.password
-        locations = ['classpath:db/migration']
-        baselineOnMigrate = true
-    }
+flyway {
+    url = flywayParam.url
+    user = flywayParam.user
+    password = flywayParam.password
+    locations = flywayParam.locations
+    cleanDisabled = flywayParam.cleanDisabled
 }
