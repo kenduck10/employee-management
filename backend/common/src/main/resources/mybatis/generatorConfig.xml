@@ -1,53 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "https://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <context id="mysql" targetRuntime="MyBatis3">
-        <!-- コメント生成を無効化 -->
-        <commentGenerator>
-            <property name="suppressAllComments" value="true" />
-            <property name="suppressDate" value="true" />
-        </commentGenerator>
-
+    <context id="employee-management" targetRuntime="MyBatis3DynamicSql">
         <!-- データベース接続設定 -->
-        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-            connectionURL="jdbc:mysql://localhost:3306/employee_management"
-            userId="root"
-            password="password">
+        <jdbcConnection
+            driverClass="${driverClass}"
+            connectionURL="${url}"
+            userId="${username}"
+            password="${password}">
         </jdbcConnection>
-
         <!-- Java型マッピング設定 -->
         <javaTypeResolver>
-            <property name="forceBigDecimals" value="false" />
+            <property name="useJSR310Types" value="true" />
         </javaTypeResolver>
-
         <!-- モデルクラス生成設定 -->
-        <javaModelGenerator targetPackage="com.example.employee.common.model"
-            targetProject="src/main/java">
-            <property name="enableSubPackages" value="true" />
-            <property name="trimStrings" value="true" />
+        <javaModelGenerator targetPackage="com.kenduck10.common.models.generated"
+            targetProject="${targetProject}">
         </javaModelGenerator>
-
-        <!-- SQLマップファイル生成設定 -->
-        <sqlMapGenerator targetPackage="mapper"
-            targetProject="src/main/resources">
-            <property name="enableSubPackages" value="true" />
-        </sqlMapGenerator>
-
         <!-- Mapperインターフェース生成設定 -->
-        <javaClientGenerator type="XMLMAPPER"
-            targetPackage="com.example.employee.common.mapper"
-            targetProject="src/main/java">
-            <property name="enableSubPackages" value="true" />
+        <javaClientGenerator
+            targetPackage="com.kenduck10.common.mappers.generated"
+            targetProject="${targetProject}">
         </javaClientGenerator>
 
         <!-- テーブル設定 -->
-        <table tableName="employees" domainObjectName="Employee">
-            <generatedKey column="id" sqlStatement="JDBC" />
+        <table tableName="employees" domainObjectName="GeneratedEmployee"
+            mapperName="GeneratedEmployeeMapper">
+            <property name="constructorBased" value="true" />
         </table>
-
-        <table tableName="departments" domainObjectName="Department">
-            <generatedKey column="id" sqlStatement="JDBC" />
+        <table tableName="departments" domainObjectName="GeneratedDepartment"
+            mapperName="GeneratedDepartmentMapper">
+            <property name="constructorBased" value="true" />
         </table>
     </context>
 </generatorConfiguration>

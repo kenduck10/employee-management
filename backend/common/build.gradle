@@ -10,10 +10,12 @@ plugins {
 
 dependencies {
     implementation 'org.postgresql:postgresql:42.7.7'
+    implementation 'org.mybatis.generator:mybatis-generator-core:1.4.2'
 }
 
 ext.resourcesPath = "${projectDir}/src/main/resources"
 apply from: 'gradle/profile.gradle'
+apply from: 'gradle/mybatis.gradle'
 
 flyway {
     def flywayParam = getFlywayParam()
