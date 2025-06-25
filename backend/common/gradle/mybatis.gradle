@@ -13,16 +13,16 @@ task mbGenerator {
         ant.properties['url'] = datasource.url
         ant.properties['userId'] = datasource.username
         ant.properties['password'] = datasource.password
-        ant.properties['driverClass'] = datasource['driver-class-name']
+        ant.properties['driverClass'] = datasource.driverClassName
         ant.properties['targetProject'] = "${projectDir}/src/main/java".toString()
         ant.taskdef(name: 'mbgenerator', classname: 'org.mybatis.generator.ant.GeneratorAntTask', classpath: configurations.customMbGenerator.asPath)
-        ant.mbgenerator(overwrite: true, configfile: "${resourcesPath}mybatis/generatorConfig.xml", verbose: true) {
+        ant.mbgenerator(overwrite: true, configfile: "${resourcesPath}/mybatis/generatorConfig.xml", verbose: true) {
             propertyset {
-                propertyeref(name: 'url')
-                propertyeref(name: 'userId')
-                propertyeref(name: 'password')
-                propertyeref(name: 'driverClass')
-                propertyeref(name: 'targetProject')
+                propertyref(name: 'url')
+                propertyref(name: 'userId')
+                propertyref(name: 'password')
+                propertyref(name: 'driverClass')
+                propertyref(name: 'targetProject')
             }
         }
     }

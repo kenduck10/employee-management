@@ -7,7 +7,7 @@
         <jdbcConnection
             driverClass="${driverClass}"
             connectionURL="${url}"
-            userId="${username}"
+            userId="${userId}"
             password="${password}">
         </jdbcConnection>
         <!-- Java型マッピング設定 -->
