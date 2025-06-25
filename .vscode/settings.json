@@ -16,9 +16,9 @@
   "java.format.enabled": true,
   "java.format.settings.profile": "GoogleStyle",
   "java.format.settings.url": "eclipse-java-google-style.xml",
-  "[groovy]": {
-    "editor.defaultFormatter": "NicolasVuillamy.vscode-groovy-lint"
-  },
+  // "[groovy]": {
+  //   "editor.defaultFormatter": "NicolasVuillamy.vscode-groovy-lint"
+  // },
   "[sql]": {
     "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
   },

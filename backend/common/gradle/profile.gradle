@@ -14,7 +14,7 @@ ext.getActiveProfile = {
         return profileFromSystemProperty.trim()
     }
     def profileFromEnv = System.getenv('SPRING_PROFILES_ACTIVE')
-    if (profileFromEnv != null && !profileFromEnvVar.trim().isEmpty()) {
+    if (profileFromEnv != null && !profileFromEnv.trim().isEmpty()) {
         return profileFromEnv.trim()
     }
     return 'default'
