@@ -1,3 +1,4 @@
+
 configurations {
     customMbGenerator
 }
@@ -5,6 +6,8 @@ configurations {
 dependencies {
     customMbGenerator 'org.mybatis.generator:mybatis-generator-core:1.4.2'
     customMbGenerator 'org.postgresql:postgresql:42.7.7'
+    // 事前にコンパイルするプラグインをクラスパスに含める
+    customMbGenerator sourceSets.main.output
 }
 
 task mbGenerator {
@@ -29,3 +32,5 @@ task mbGenerator {
 }
 
 mbGenerator.group = 'mybatis'
+// プラグインを事前にコンパイルさせる
+mbGenerator.dependsOn compileJava

@@ -3,6 +3,9 @@
 
 <generatorConfiguration>
     <context id="employee-management" targetRuntime="MyBatis3DynamicSql">
+        <plugin type="com.kenduck10.common.plugins.mybatis.ColumnIgnorePlugin">
+            <property name="ignoreColumns" value="created_at,updated_at" />
+        </plugin>
         <!-- データベース接続設定 -->
         <jdbcConnection
             driverClass="${driverClass}"
