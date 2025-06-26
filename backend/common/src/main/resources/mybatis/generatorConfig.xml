@@ -3,6 +3,8 @@
 
 <generatorConfiguration>
     <context id="employee-management" targetRuntime="MyBatis3DynamicSql">
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
         <plugin type="com.kenduck10.common.plugins.mybatis.ColumnIgnorePlugin">
             <property name="ignoreColumns" value="created_at,updated_at" />
         </plugin>

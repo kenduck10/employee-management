@@ -10,8 +10,17 @@ dependencies {
     customMbGenerator sourceSets.main.output
 }
 
+task cleanGeneratedFiles {
+    doLast {
+        delete fileTree(dir: 'src/main/java/com/kenduck10/common/models/generated', include: '**/*.java')
+        delete fileTree(dir: 'src/main/java/com/kenduck10/common/mappers/generated', include: '**/*.java')
+        println "Old generated files are cleaned."
+    }
+}
+
 task mbGenerator {
-    doFirst {
+    dependsOn cleanGeneratedFiles
+    doLast {
         def datasource = getDatasource()
         ant.properties['url'] = datasource.url
         ant.properties['userId'] = datasource.username
