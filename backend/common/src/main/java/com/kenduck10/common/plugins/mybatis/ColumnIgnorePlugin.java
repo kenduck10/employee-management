@@ -2,13 +2,11 @@ package com.kenduck10.common.plugins.mybatis;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.Plugin;
 import org.mybatis.generator.api.PluginAdapter;
-import org.mybatis.generator.api.dom.java.Field;
-import org.mybatis.generator.api.dom.java.TopLevelClass;
 
 public class ColumnIgnorePlugin extends PluginAdapter {
   private List<String> ignoreColumns = new ArrayList<>();
@@ -30,26 +28,22 @@ public class ColumnIgnorePlugin extends PluginAdapter {
   }
 
   @Override
-  public boolean modelFieldGenerated(Field field, TopLevelClass topLevelClass,
-      IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable,
-      Plugin.ModelClassType modelClassType) {
-
+  public void initialized(IntrospectedTable introspectedTable) {
     String tableName = introspectedTable.getTableConfiguration().getTableName();
-    String columnName = introspectedColumn.getActualColumnName();
-
-    // 除外テーブルの場合は通常通り生成
     if (excludeTables.contains(tableName)) {
-      return true;
+      return;
     }
-
-    // // テーブル固有のプロパティをチェック
-    // String includeTimestamps = introspectedTable.getTableConfiguration()
-    // .getProperty("includeTimestamps");
-    // if ("true".equals(includeTimestamps)) {
-    // return true;
-    // }
-
-    // 除外対象カラムの場合は生成しない
-    return !ignoreColumns.contains(columnName);
+    // 除外対象カラムをIntrospectedTableから削除
+    List<IntrospectedColumn> allColumns = introspectedTable.getAllColumns();
+    Iterator<IntrospectedColumn> columnIterator = allColumns.iterator();
+    while (columnIterator.hasNext()) {
+      IntrospectedColumn column = columnIterator.next();
+      if (ignoreColumns.contains(column.getActualColumnName())) {
+        columnIterator.remove();
+      }
+    }
+    // Base Columnsからも削除
+    List<IntrospectedColumn> baseColumns = introspectedTable.getBaseColumns();
+    baseColumns.removeIf(column -> ignoreColumns.contains(column.getActualColumnName()));
   }
 }
