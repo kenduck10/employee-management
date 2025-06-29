@@ -1,0 +1,9 @@
+spring:
+  config:
+    import:
+      - 'properties-common.yml'
+  datasource:
+    url: ${datasource.url}
+    username: ${datasource.username}
+    password: ${datasource.password}
+    driver-class-name: ${datasource.driver-class-name}

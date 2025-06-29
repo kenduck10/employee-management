@@ -1,0 +1,13 @@
+departments:
+  - code: 'IT'
+    name: '情報技術部'
+    description: 'システム開発とIT運用を担当'
+  - code: 'HR'
+    name: '人事部'
+    description: '人材採用と人事管理を担当'
+  - code: 'SALES'
+    name: '営業部'
+    description: '営業活動と顧客管理を担当'
+  - code: 'FINANCE'
+    name: '経理部'
+    description: '財務管理と会計処理を担当'

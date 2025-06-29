@@ -4,10 +4,12 @@ import static com.kenduck10.common.mappers.generated.GeneratedDepartmentDynamicS
 import static org.mybatis.dynamic.sql.SqlBuilder.isIn;
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.BeanUtils;
 import com.kenduck10.common.mappers.generated.GeneratedDepartmentMapper;
 import com.kenduck10.common.models.Department;
 
+@Mapper
 public interface DepartmentMapper extends GeneratedDepartmentMapper {
 
   /**

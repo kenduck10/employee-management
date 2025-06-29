@@ -1,7 +1,7 @@
 apply from: 'gradle/db.gradle'
 
 ext.getDatasource = {
-    return createDatasource('my-properties.yml')
+    return createDatasource('properties-common.yml')
 }
 
 ext.getFlywayParam = {
