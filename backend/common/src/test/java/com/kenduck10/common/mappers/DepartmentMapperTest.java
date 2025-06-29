@@ -24,132 +24,90 @@ class DepartmentMapperTest {
   private DepartmentMapper departmentMapper;
 
   @Nested
+  @DataSet("datasets/mappers/DepartmentMapper_selectByCodes.yml")
   class SelectByCodesTest {
 
+    /**
+     * 単一のコードで部署を取得するテスト。 単一のコード入力でメソッドが正しく動作することを検証する。
+     */
     @Test
-    @DataSet("datasets/mappers/DepartmentMapper_selectByCodes.yml")
-    void selectByCodes_正常系_複数のコードで部署を取得() {
-      List<String> codes = Arrays.asList("IT", "HR");
+    void withSingleCode_shouldReturnOneDepartment() {
+      List<String> codes = Arrays.asList("SALES");
+      List<Department> result = departmentMapper.selectByCodes(codes);
+      assertThat(result).hasSize(1);
+
+      Department department = result.get(0);
+      assertThat(department.getCode()).isEqualTo("SALES");
+      assertThat(department.getName()).isEqualTo("営業部");
+      assertThat(department.getDescription()).isEqualTo("営業活動と顧客管理を担当");
+    }
+
+    /**
+     * 全てのコードで全部署を取得するテスト。 利用可能な全てのコードを提供して、全部署が正しい順序で返されることを検証する。
+     */
+    @Test
+    void withAllCodes_shouldReturnAllDepartments() {
+      List<String> codes = Arrays.asList("IT", "HR", "SALES", "FINANCE");
+      List<Department> result = departmentMapper.selectByCodes(codes);
+      assertThat(result).hasSize(4);
+
+      // 部署がコード順（アルファベット順）で返されることを検証
+      assertThat(result.get(0).getCode()).isEqualTo("FINANCE");
+      assertThat(result.get(1).getCode()).isEqualTo("HR");
+      assertThat(result.get(2).getCode()).isEqualTo("IT");
+      assertThat(result.get(3).getCode()).isEqualTo("SALES");
+    }
+
+    /**
+     * 存在しない部署コードを処理するテスト。 一致する部署が見つからない場合に空のリストが返されることを検証する。
+     */
+    @Test
+    void withNonExistentCodes_shouldReturnEmptyList() {
+      List<String> codes = Arrays.asList("NONEXISTENT", "INVALID");
+      List<Department> result = departmentMapper.selectByCodes(codes);
+      assertThat(result).isEmpty();
+    }
+
+    /**
+     * 存在するコードと存在しないコードが混在する場合のテスト。 存在する部署のみが返されることを検証する。
+     */
+    @Test
+    void withMixedCodes_shouldReturnOnlyExistingDepartments() {
+      List<String> codes = Arrays.asList("IT", "NONEXISTENT", "HR", "INVALID");
       List<Department> result = departmentMapper.selectByCodes(codes);
       assertThat(result).hasSize(2);
 
-      Department department1 = result.get(0);
-      assertThat(department1.getCode()).isEqualTo("HR");
-      assertThat(department1.getName()).isEqualTo("人事部");
-      assertThat(department1.getDescription()).isEqualTo("人材採用と人事管理を担当");
+      assertThat(result.get(0).getCode()).isEqualTo("HR");
+      assertThat(result.get(1).getCode()).isEqualTo("IT");
+    }
 
-      Department department2 = result.get(1);
-      assertThat(department2.getCode()).isEqualTo("IT");
-      assertThat(department2.getName()).isEqualTo("情報技術部");
-      assertThat(department2.getDescription()).isEqualTo("システム開発とIT運用を担当");
+    /**
+     * 入力リストに重複するコードが含まれる場合のテスト。 重複するコードが結果に重複した部署を生成しないことを検証する。
+     */
+    @Test
+    void withDuplicateCodes_shouldReturnUniqueResults() {
+      List<String> codes = Arrays.asList("IT", "HR", "IT", "HR");
+      List<Department> result = departmentMapper.selectByCodes(codes);
+      assertThat(result).hasSize(2);
+
+      assertThat(result.get(0).getCode()).isEqualTo("HR");
+      assertThat(result.get(1).getCode()).isEqualTo("IT");
+    }
+
+    /**
+     * 結果の順序を検証するテスト。 入力の順序に関係なく、部署が常にコードのアルファベット順で返されることを検証する。
+     */
+    @Test
+    void withUnorderedInput_shouldReturnOrderedResults() {
+      List<String> codes = Arrays.asList("SALES", "FINANCE", "IT", "HR");
+      List<Department> result = departmentMapper.selectByCodes(codes);
+      assertThat(result).hasSize(4);
+
+      // 結果がコードのアルファベット順で並んでいることを検証
+      assertThat(result.get(0).getCode()).isEqualTo("FINANCE");
+      assertThat(result.get(1).getCode()).isEqualTo("HR");
+      assertThat(result.get(2).getCode()).isEqualTo("IT");
+      assertThat(result.get(3).getCode()).isEqualTo("SALES");
     }
   }
-
-
-  // @Test
-  // @DisplayName("単一のコードで部署を正常に取得できること")
-  // @DataSet("datasets/departments.yml")
-  // void selectByCodes_正常系_単一のコードで部署を取得() {
-  // // Given
-  // List<String> codes = Arrays.asList("SALES");
-
-  // // When
-  // List<Department> result = departmentMapper.selectByCodes(codes);
-
-  // // Then
-  // assertThat(result).hasSize(1);
-  // Department salesDepartment = result.get(0);
-  // assertThat(salesDepartment.getCode()).isEqualTo("SALES");
-  // assertThat(salesDepartment.getName()).isEqualTo("営業部");
-  // assertThat(salesDepartment.getDescription()).isEqualTo("営業活動と顧客管理を担当");
-  // }
-
-  // @Test
-  // @DisplayName("存在しないコードを指定した場合、空のリストが返されること")
-  // @DataSet("datasets/departments.yml")
-  // void selectByCodes_正常系_存在しないコードで空のリストを取得() {
-  // // Given
-  // List<String> codes = Arrays.asList("NONEXISTENT");
-
-  // // When
-  // List<Department> result = departmentMapper.selectByCodes(codes);
-
-  // // Then
-  // assertThat(result).isEmpty();
-  // }
-
-  // @Test
-  // @DisplayName("存在するコードと存在しないコードが混在している場合、存在するもののみ取得できること")
-  // @DataSet("datasets/departments.yml")
-  // void selectByCodes_正常系_存在するコードと存在しないコードの混在() {
-  // // Given
-  // List<String> codes = Arrays.asList("IT", "NONEXISTENT", "FINANCE");
-
-  // // When
-  // List<Department> result = departmentMapper.selectByCodes(codes);
-
-  // // Then
-  // assertThat(result).hasSize(2);
-  // assertThat(result)
-  // .extracting(Department::getCode)
-  // .containsExactlyInAnyOrder("IT", "FINANCE");
-  // }
-
-  // @Test
-  // @DisplayName("空のコードリストを指定した場合、IllegalArgumentExceptionが発生すること")
-  // void selectByCodes_異常系_空のコードリスト() {
-  // // Given
-  // List<String> codes = Collections.emptyList();
-
-  // // When & Then
-  // assertThatThrownBy(() -> departmentMapper.selectByCodes(codes))
-  // .isInstanceOf(IllegalArgumentException.class)
-  // .hasMessage("Code list cannot be empty");
-  // }
-
-  // @Test
-  // @DisplayName("nullのコードリストを指定した場合、IllegalArgumentExceptionが発生すること")
-  // void selectByCodes_異常系_nullのコードリスト() {
-  // // Given
-  // List<String> codes = null;
-
-  // // When & Then
-  // assertThatThrownBy(() -> departmentMapper.selectByCodes(codes))
-  // .isInstanceOf(IllegalArgumentException.class)
-  // .hasMessage("Code list cannot be empty");
-  // }
-
-  // @Test
-  // @DisplayName("全ての部署コードを指定した場合、全ての部署が取得できること")
-  // @DataSet("datasets/departments.yml")
-  // void selectByCodes_正常系_全ての部署コードを指定() {
-  // // Given
-  // List<String> codes = Arrays.asList("IT", "HR", "SALES", "FINANCE");
-
-  // // When
-  // List<Department> result = departmentMapper.selectByCodes(codes);
-
-  // // Then
-  // assertThat(result).hasSize(4);
-  // assertThat(result)
-  // .extracting(Department::getCode)
-  // .containsExactlyInAnyOrder("IT", "HR", "SALES", "FINANCE");
-  // }
-
-  // @Test
-  // @DisplayName("重複するコードを指定した場合、重複なしで部署が取得できること")
-  // @DataSet("datasets/departments.yml")
-  // void selectByCodes_正常系_重複するコードを指定() {
-  // // Given
-  // List<String> codes = Arrays.asList("IT", "IT", "HR", "HR");
-
-  // // When
-  // List<Department> result = departmentMapper.selectByCodes(codes);
-
-  // // Then
-  // assertThat(result).hasSize(2);
-  // assertThat(result)
-  // .extracting(Department::getCode)
-  // .containsExactlyInAnyOrder("IT", "HR");
-  // }
 }
