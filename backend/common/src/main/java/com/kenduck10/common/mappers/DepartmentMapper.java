@@ -23,7 +23,8 @@ public interface DepartmentMapper extends GeneratedDepartmentMapper {
     if (CollectionUtils.isEmpty(codes)) {
       throw new IllegalArgumentException("Code list cannot be empty");
     }
-    return select(c -> c.where(code, isIn(codes))).stream()
+    return select(c -> c.where(code, isIn(codes)).orderBy(code))
+        .stream()
         .map(generatedDepartment -> {
           Department department = new Department();
           BeanUtils.copyProperties(generatedDepartment, department);

@@ -3,6 +3,7 @@ package com.kenduck10.common.mappers;
 import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,37 +23,28 @@ class DepartmentMapperTest {
   @Autowired
   private DepartmentMapper departmentMapper;
 
-  @Test
-  @DataSet("datasets/mappers/DepartmentMapper_selectByCodes.yml")
-  void selectByCodes_正常系_複数のコードで部署を取得() {
-    // Given
-    List<String> codes = Arrays.asList("IT", "HR");
+  @Nested
+  class SelectByCodesTest {
 
-    // When
-    List<Department> result = departmentMapper.selectByCodes(codes);
+    @Test
+    @DataSet("datasets/mappers/DepartmentMapper_selectByCodes.yml")
+    void selectByCodes_正常系_複数のコードで部署を取得() {
+      List<String> codes = Arrays.asList("IT", "HR");
+      List<Department> result = departmentMapper.selectByCodes(codes);
+      assertThat(result).hasSize(2);
 
-    // Then
-    assertThat(result).hasSize(2);
-    assertThat(result)
-        .extracting(Department::getCode)
-        .containsExactlyInAnyOrder("IT", "HR");
+      Department department1 = result.get(0);
+      assertThat(department1.getCode()).isEqualTo("HR");
+      assertThat(department1.getName()).isEqualTo("人事部");
+      assertThat(department1.getDescription()).isEqualTo("人材採用と人事管理を担当");
 
-    Department itDepartment = result.stream()
-        .filter(dept -> "IT".equals(dept.getCode()))
-        .findFirst()
-        .orElse(null);
-    assertThat(itDepartment).isNotNull();
-    assertThat(itDepartment.getName()).isEqualTo("情報技術部");
-    assertThat(itDepartment.getDescription()).isEqualTo("システム開発とIT運用を担当");
-
-    Department hrDepartment = result.stream()
-        .filter(dept -> "HR".equals(dept.getCode()))
-        .findFirst()
-        .orElse(null);
-    assertThat(hrDepartment).isNotNull();
-    assertThat(hrDepartment.getName()).isEqualTo("人事部");
-    assertThat(hrDepartment.getDescription()).isEqualTo("人材採用と人事管理を担当");
+      Department department2 = result.get(1);
+      assertThat(department2.getCode()).isEqualTo("IT");
+      assertThat(department2.getName()).isEqualTo("情報技術部");
+      assertThat(department2.getDescription()).isEqualTo("システム開発とIT運用を担当");
+    }
   }
+
 
   // @Test
   // @DisplayName("単一のコードで部署を正常に取得できること")
