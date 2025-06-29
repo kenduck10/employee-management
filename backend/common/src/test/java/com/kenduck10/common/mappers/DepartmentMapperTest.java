@@ -33,7 +33,7 @@ class DepartmentMapperTest {
     @Test
     void withSingleCode_shouldReturnOneDepartment() {
       List<String> codes = Arrays.asList("SALES");
-      List<Department> result = departmentMapper.selectByCodes(codes);
+      List<Department> result = departmentMapper.selectByCodes(codes).list();
       assertThat(result).hasSize(1);
 
       Department department = result.get(0);
@@ -48,7 +48,7 @@ class DepartmentMapperTest {
     @Test
     void withAllCodes_shouldReturnAllDepartments() {
       List<String> codes = Arrays.asList("IT", "HR", "SALES", "FINANCE");
-      List<Department> result = departmentMapper.selectByCodes(codes);
+      List<Department> result = departmentMapper.selectByCodes(codes).list();
       assertThat(result).hasSize(4);
 
       // 部署がコード順（アルファベット順）で返されることを検証
@@ -64,7 +64,7 @@ class DepartmentMapperTest {
     @Test
     void withNonExistentCodes_shouldReturnEmptyList() {
       List<String> codes = Arrays.asList("NONEXISTENT", "INVALID");
-      List<Department> result = departmentMapper.selectByCodes(codes);
+      List<Department> result = departmentMapper.selectByCodes(codes).list();
       assertThat(result).isEmpty();
     }
 
@@ -74,7 +74,7 @@ class DepartmentMapperTest {
     @Test
     void withMixedCodes_shouldReturnOnlyExistingDepartments() {
       List<String> codes = Arrays.asList("IT", "NONEXISTENT", "HR", "INVALID");
-      List<Department> result = departmentMapper.selectByCodes(codes);
+      List<Department> result = departmentMapper.selectByCodes(codes).list();
       assertThat(result).hasSize(2);
 
       assertThat(result.get(0).getCode()).isEqualTo("HR");
@@ -87,7 +87,7 @@ class DepartmentMapperTest {
     @Test
     void withDuplicateCodes_shouldReturnUniqueResults() {
       List<String> codes = Arrays.asList("IT", "HR", "IT", "HR");
-      List<Department> result = departmentMapper.selectByCodes(codes);
+      List<Department> result = departmentMapper.selectByCodes(codes).list();
       assertThat(result).hasSize(2);
 
       assertThat(result.get(0).getCode()).isEqualTo("HR");
@@ -100,7 +100,7 @@ class DepartmentMapperTest {
     @Test
     void withUnorderedInput_shouldReturnOrderedResults() {
       List<String> codes = Arrays.asList("SALES", "FINANCE", "IT", "HR");
-      List<Department> result = departmentMapper.selectByCodes(codes);
+      List<Department> result = departmentMapper.selectByCodes(codes).list();
       assertThat(result).hasSize(4);
 
       // 結果がコードのアルファベット順で並んでいることを検証

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.BeanUtils;
 import com.kenduck10.common.mappers.generated.GeneratedDepartmentMapper;
 import com.kenduck10.common.models.Department;
+import com.kenduck10.common.models.collections.Departments;
 
 @Mapper
 public interface DepartmentMapper extends GeneratedDepartmentMapper {
@@ -19,17 +20,18 @@ public interface DepartmentMapper extends GeneratedDepartmentMapper {
    * @return 指定されたコードリストに含まれるコードを持つ部署のリスト
    * @throws IllegalArgumentException コードリストが空の場合
    */
-  default List<Department> selectByCodes(List<String> codes) {
+  default Departments selectByCodes(List<String> codes) {
     if (CollectionUtils.isEmpty(codes)) {
       throw new IllegalArgumentException("Code list cannot be empty");
     }
-    return select(c -> c.where(code, isIn(codes)).orderBy(code))
-        .stream()
-        .map(generatedDepartment -> {
-          Department department = new Department();
-          BeanUtils.copyProperties(generatedDepartment, department);
-          return department;
-        })
-        .toList();
+    return new Departments(
+        select(c -> c.where(code, isIn(codes)).orderBy(code))
+            .stream()
+            .map(generatedDepartment -> {
+              Department department = new Department();
+              BeanUtils.copyProperties(generatedDepartment, department);
+              return department;
+            })
+            .toList());
   }
 }
