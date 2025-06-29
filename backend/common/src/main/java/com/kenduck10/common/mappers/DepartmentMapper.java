@@ -10,6 +10,9 @@ import com.kenduck10.common.mappers.generated.GeneratedDepartmentMapper;
 import com.kenduck10.common.models.Department;
 import com.kenduck10.common.models.collections.Departments;
 
+/**
+ * 部門マッパークラス
+ */
 @Mapper
 public interface DepartmentMapper extends GeneratedDepartmentMapper {
 
